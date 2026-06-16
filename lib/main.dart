@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 const String Berlin = "latitude=52.52,&longitude=13.41";
-const String Krakow = "latitude=50.06,&longitude=2.35";
+const String Krakow = "latitude=50.06,&longitude=19.94";
 const String Londyn = "latitude=51.12,&longitude=0.12";
 const String Paryz = "latitude=48.85,&longitude=2.35";
 const String Rzym = "latitude=41.90,&longitude=12.49";
@@ -15,20 +15,36 @@ const String Oslo = "latitude=59.91,&longitude=10.75";
 const String Sztokholm = "latitude=59.33,&longitude=18.06";
 const String Helsinki = "latitude=60.16,&longitude=24.93";
 
+const cities = [
+  ('Berlin', Berlin),
+  ('Krakow', Krakow),
+  ('Londyn', Londyn),
+  ('Paryz', Paryz),
+  ('Rzym', Rzym),
+  ('Praga', Praga),
+  ('Budapeszt', Budapeszt),
+  ('Oslo', Oslo),
+  ('Sztokholm', Sztokholm),
+  ('Helsinki', Helsinki),
+];
+
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text("Meteo"),
-        ),
-        body: Text("Hello"),
+      debugShowCheckedModeBanner: false,
+      title: 'Meteo App',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        useMaterial3: true,
       ),
+      home: const MyHomePage(title: "Meteo"),
     );
   }
 }
@@ -53,39 +69,29 @@ class _HomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: .center,
-        ),
+      body: const Center(
+        child: Text("Wybierz miasto"),
       ),
       floatingActionButton: Column(
-        children: [
-          FloatingActionButton.extended(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute (
-                  builder: (context) => DetailScreen(city: '$Berlin'),
-                ),
-              );
-            },
-            icon: const Icon(Icons.subject),
-            label: const Text("Berlin")
-          ),
-          FloatingActionButton.extended(
+        mainAxisSize: MainAxisSize.min,
+        children: cities.map((city) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: FloatingActionButton.extended(
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute (
-                    builder: (context) => DetailScreen(city: '$Krakow'),
+                  MaterialPageRoute(
+                    builder: (_) => DetailScreen(city: city.$2),
                   ),
                 );
               },
               icon: const Icon(Icons.subject),
-              label: const Text("Krakow")
-          ),
-        ],
-      )
+              label: Text(city.$1),
+            ),
+          );
+        }).toList(),
+      ),
     );
   }
 }
