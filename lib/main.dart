@@ -4,6 +4,8 @@ import 'DetailScreen.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+import 'package:hive_flutter/hive_flutter.dart';
+
 const String Berlin = "latitude=52.52,&longitude=13.41";
 const String Krakow = "latitude=50.06,&longitude=19.94";
 const String Londyn = "latitude=51.12,&longitude=0.12";
@@ -28,7 +30,11 @@ const cities = [
   ('Helsinki', Helsinki),
 ];
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Hive.initFlutter();
+
   runApp(MyApp());
 }
 
@@ -72,6 +78,7 @@ class _HomePageState extends State<MyHomePage> {
       body: const Center(
         child: Text("Wybierz miasto"),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Column(
         mainAxisSize: MainAxisSize.min,
         children: cities.map((city) {
